@@ -17,7 +17,14 @@
       + '&authcode='  + encodeURIComponent(code)
       + '&verifier='  + encodeURIComponent(codeVerifier);
 
-    window.location.replace(returnUrl);
+    if (window.opener) {
+      // Send back to parent and close popup
+      window.opener.location.replace(returnUrl);
+      window.close();
+    } else {
+      // Fallback - redirect this window
+      window.location.replace(returnUrl);
+    }
   } else {
     document.body.innerHTML = '<p>Error: ' + (error || 'missing parameters') + '</p>';
   }
