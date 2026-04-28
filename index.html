@@ -3,15 +3,16 @@
 <head><title>Auth Callback</title></head>
 <body>
 <script>
-  const params   = new URLSearchParams(window.location.search);
-  const code     = params.get('code');
-  const error    = params.get('error');
-  const state    = params.get('state'); // this will be the xApp URL
+  const params = new URLSearchParams(window.location.search);
+  const code   = params.get('code');
+  const error  = params.get('error');
+  const state  = params.get('state');
 
   if (code && state) {
-    // Redirect popup back to xApp with the code
-    const returnUrl = state + '&authcode=' + encodeURIComponent(code);
-    window.location.href = returnUrl;
+    // state is the xApp URL, already decoded
+    const xAppUrl    = decodeURIComponent(state);
+    const returnUrl  = xAppUrl + '&authcode=' + encodeURIComponent(code);
+    window.location.replace(returnUrl);
   } else {
     document.body.innerHTML = '<p>Error: ' + (error || 'missing parameters') + '</p>';
   }
