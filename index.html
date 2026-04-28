@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>Auth Callback</title></head>
+<body>
+<script>
+  if (window.opener) {
+    window.opener.postMessage(window.location.search, '*');
+    window.close();
+  }
+</script>
+<p>Completing authentication, please wait...</p>
+</body>
+</html>
