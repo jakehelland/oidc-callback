@@ -3,9 +3,15 @@
 <head><title>Auth Callback</title></head>
 <body>
 <script>
+  const search = window.location.search;
+  
   if (window.opener) {
-    window.opener.postMessage(window.location.search, '*');
+    // Opened as popup
+    window.opener.postMessage(search, '*');
     window.close();
+  } else if (window.parent !== window) {
+    // Running in an iframe
+    window.parent.postMessage(search, '*');
   }
 </script>
 <p>Completing authentication, please wait...</p>
