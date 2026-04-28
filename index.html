@@ -3,24 +3,19 @@
 <head><title>Auth Callback</title></head>
 <body>
 <script>
-  const search = window.location.search;
-  
-  // Log what we have access to
-  console.log('search:', search);
-  console.log('window.opener:', window.opener);
-  console.log('window.parent:', window.parent);
-  console.log('window.parent === window:', window.parent === window);
+  const params   = new URLSearchParams(window.location.search);
+  const code     = params.get('code');
+  const error    = params.get('error');
+  const state    = params.get('state'); // this will be the xApp URL
 
-  if (window.opener) {
-    window.opener.postMessage(search, '*');
-    document.body.innerHTML = '<p>Sent via opener. You can close this window.</p>';
-  } else if (window.parent && window.parent !== window) {
-    window.parent.postMessage(search, '*');
-    document.body.innerHTML = '<p>Sent via parent.</p>';
+  if (code && state) {
+    // Redirect popup back to xApp with the code
+    const returnUrl = state + '&authcode=' + encodeURIComponent(code);
+    window.location.href = returnUrl;
   } else {
-    document.body.innerHTML = '<p>ERROR: No opener or parent found. opener=' + window.opener + '</p>';
+    document.body.innerHTML = '<p>Error: ' + (error || 'missing parameters') + '</p>';
   }
 </script>
-<p>Completing authentication, please wait...</p>
+<p>Redirecting back to chat...</p>
 </body>
 </html>
