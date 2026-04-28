@@ -5,13 +5,20 @@
 <script>
   const search = window.location.search;
   
+  // Log what we have access to
+  console.log('search:', search);
+  console.log('window.opener:', window.opener);
+  console.log('window.parent:', window.parent);
+  console.log('window.parent === window:', window.parent === window);
+
   if (window.opener) {
-    // Opened as popup
     window.opener.postMessage(search, '*');
-    window.close();
-  } else if (window.parent !== window) {
-    // Running in an iframe
+    document.body.innerHTML = '<p>Sent via opener. You can close this window.</p>';
+  } else if (window.parent && window.parent !== window) {
     window.parent.postMessage(search, '*');
+    document.body.innerHTML = '<p>Sent via parent.</p>';
+  } else {
+    document.body.innerHTML = '<p>ERROR: No opener or parent found. opener=' + window.opener + '</p>';
   }
 </script>
 <p>Completing authentication, please wait...</p>
